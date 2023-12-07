@@ -7,9 +7,12 @@ import styles from './page.module.css'
 const Charts = ({ chartData } : any) => {
     const chartContainerRef : any = useRef<string>('');
 
+
     useEffect(() => {
         const chartOptions: DeepPartial<ChartOptions>  = {
             layout: { textColor: 'black', background: { type: ColorType.Solid, color: 'black' } },
+            width: 500,
+            height: 500,
         };
 
         const chart = createChart(chartContainerRef.current, chartOptions);
@@ -32,12 +35,13 @@ const Charts = ({ chartData } : any) => {
             { time: '2018-12-31', open: 109.87, high: 114.69, low: 85.66, close: 111.26 },
         ]);
 
+
         chart.timeScale().fitContent();
     })
 
     console.log("chartData",chartData)
     return (
-        <div ref={chartContainerRef} id={styles.charts}>Charts</div>
+        <div ref={chartContainerRef}  id={styles.charts}>Charts</div>
     )
 }
 
