@@ -6,18 +6,18 @@ const HomePage = () => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  const convertEpochToDateTime = (epoch:any) => {
-    const date = new Date(epoch * 1000);
-    return date.toISOString().slice(0, 19).replace("T", " ");
-  };
+  // function convertDate(epoch:any) {
+  //   const d =  new Date(epoch).valueOf() / 1000;
+  //   return d.reverse();
+  //  }
 
   const transformData = (data:any) => {
     return data.map((item:any)=> ({
-      0: convertEpochToDateTime(item[0]),      // MTS (Millisecond epoch timestamp)
-      1: item[1],      // OPEN
-      4: item[2],      // CLOSE
-      2: item[3],      // HIGH
-      3: item[4],      // LOW
+      time: item[0],      // MTS (Millisecond epoch timestamp)
+      open: item[1],      // OPEN
+      close: item[2],      // CLOSE
+      high: item[3],      // HIGH
+      low: item[4],      // LOW
     }));
   };
 
@@ -29,14 +29,16 @@ const HomePage = () => {
     try {
       const response = await fetch('https://api-pub.bitfinex.com/v2/candles/trade%3A1m%3AtBTCUSD/hist');
       const result = await response.json();
-      // console.log("result", result)
-
-      setData(transformData(result));
+      const sortedData = result.sort((a: any, b:any) => a[0] - b[0]);
+      console.log("sortedData",sortedData)
+      setData(transformData(sortedData));
     } catch (error) {
       console.error('Error fetching data:', error);
     } finally {
       setLoading(false);
     }
+
+
 
 
     // const formattedData = transformData(data);
