@@ -13,13 +13,21 @@ const WebSocketComponent = () => {
         const newSocket = new WebSocket('wss://api-pub.bitfinex.com/ws/2');
 
         newSocket.addEventListener('open', () => {
+            let msg = JSON.stringify({
+                event: 'subscribe',
+                channel: 'candles',
+                key: 'trade:1m:tBTCUSD'
+            });
+            newSocket.send(msg);
             console.log('WebSocket connected');
         });
 
         newSocket.addEventListener('message', (event) => {
             const result = JSON.parse(event.data);
-            console.log('Received data:', result);
-            setMessage(result);
+            if (Array.isArray(result[1])) {
+                console.log('Received data:', result);
+                setMessage(result);
+            }
         });
 
         newSocket.addEventListener('close', (event) => {

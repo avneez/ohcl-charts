@@ -10,8 +10,6 @@ const Charts = ({ chartData }: any) => {
     // const [chart1, setChart1] :any = useState();
     // const chartRef: any = useRef<any>();
 
-
-
     useEffect(() => {
         const chartOptions: DeepPartial<ChartOptions> = {
             layout: { textColor: 'black', background: { type: ColorType.Solid, color: 'black' } },
