@@ -1,16 +1,23 @@
 "use client"
-import React, { useState,useRef, useEffect } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import { createChart, ColorType } from 'lightweight-charts';
 import type { ChartOptions, DeepPartial } from 'lightweight-charts';
 import styles from './page.module.css'
+import useWebSocketComponent from '@/app/websocket/pages';
 
 const Charts = ({ chartData }: any) => {
+    // const { message, sendMessage } = useWebSocketComponent();
 
     const chartContainerRef: any = useRef<string>('');
-    // const [chart1, setChart1] :any = useState();
     // const chartRef: any = useRef<any>();
+    const [message]:any = useWebSocketComponent();
+    console.log("message",message)
+    // const {time, open, close, high ,low} = message;
+
 
     useEffect(() => {
+        // sendMessage(message);
+
         const chartOptions: DeepPartial<ChartOptions> = {
             layout: { textColor: 'black', background: { type: ColorType.Solid, color: 'black' } },
             width: 800,
@@ -29,10 +36,17 @@ const Charts = ({ chartData }: any) => {
         });
         // console.log(chartData)
         candlestickSeries.setData(chartData);
-        // console.log("chart1",chart1)
-        chart.timeScale().fitContent();
-    },[chartData])
+        // if(message){
+        //     candlestickSeries.update(
+        //         {time:time, open:open, high:close, low:high, close:low}
+        //     );
+        // }
 
+
+        chart.timeScale().fitContent();
+
+        return () => { chart.remove() }
+    }, [chartData, message])
 
 
     // console.log("chartData",chartData)

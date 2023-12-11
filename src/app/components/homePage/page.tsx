@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import Charts from './charts/page';
 
 const HomePage = () => {
-  const [data, setData] = useState(null);
+  const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const transformData = (data:any) => {
@@ -24,9 +24,9 @@ const HomePage = () => {
     try {
       const response = await fetch('https://api-pub.bitfinex.com/v2/candles/trade%3A1m%3AtBTCUSD/hist');
       const result = await response.json();
-      const sortedData = result.sort((a: any, b:any) => a[0] - b[0]);
+      const sortedData = transformData(result.sort((a: any, b:any) => a[0] - b[0]));
       // console.log("sortedData",sortedData)
-      setData(transformData(sortedData));
+      setData((prevData):any=>[...prevData,...sortedData]);
     } catch (error) {
       console.error('Error fetching data:', error);
     } finally {

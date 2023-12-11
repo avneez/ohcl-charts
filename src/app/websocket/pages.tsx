@@ -1,8 +1,8 @@
 "use client"
 import React, { useEffect, useState } from 'react';
 
-const WebSocketComponent = () => {
-    const [message, setMessage] = useState(null);
+const useWebSocketComponent = () => {
+    const [message, setMessage]: any = useState();
     const [socket, setSocket]: any = useState();
 
     useEffect(() => {
@@ -23,19 +23,27 @@ const WebSocketComponent = () => {
         });
 
         newSocket.addEventListener('message', (event) => {
-            const result = JSON.parse(event.data);
+            const result: any = JSON.parse(event.data);
             if (Array.isArray(result[1])) {
                 console.log('Received data:', result);
-                setMessage(result);
+                const candle: any = result[1]?.map((newCandledata: any) => ({
+                    time: newCandledata[0],
+                    open: newCandledata[1],
+                    close: newCandledata[2],
+                    high: newCandledata[3],
+                    low: newCandledata[4],
+                }))
+                console.log("candle", candle)
+                setMessage(candle)
             }
         });
 
         newSocket.addEventListener('close', (event) => {
             console.log('WebSocket closed:', event);
-            // Implement your reconnection logic here
+
             setTimeout(() => {
                 connectWebSocket();
-            }, 1000); // Reconnect after a delay (adjust as needed)
+            }, 1000);
         });
         setSocket(newSocket);
 
@@ -44,16 +52,20 @@ const WebSocketComponent = () => {
                 socket.close();
             }
         };
-    }; // Reconnect when the socket changes
-
-    return (
-        <div>
-            <div>
-                <h3>WebSocket Data:</h3>
-                <pre>{JSON.stringify(message, null, 2)}</pre>
-            </div>
-        </div>
-    );
+    };
+    // return (
+    //     <div>
+    //         <div>
+    //             <h3>WebSocket Data:</h3>
+    //             <pre>{JSON.stringify(message, null, 2)}</pre>
+    //         </div>
+    //     </div>
+    // );
+    console.log("messagemessagemessagemessage",message)
+    return [message]
+    // const newC = message.map((candle:any) => {
+    //     time: { candle.time }, open: { candle.open }, close: { candle.close }, high: { candle.high }, low: { candle.low }
+    // })
 }
 
-export default WebSocketComponent;
+export default useWebSocketComponent;
