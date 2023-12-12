@@ -1,6 +1,7 @@
 "use client"
 import React, { useEffect, useState } from 'react'
 import Charts from './charts/page';
+import OrderBook from './orderbook/page';
 
 const HomePage = () => {
   const [data, setData] = useState([]);
@@ -39,6 +40,7 @@ const HomePage = () => {
     {loading ? (<div>Loading...</div>) :
       (<Charts chartData={data} />)
     }
+    <OrderBook/>
   </>
 
 }
