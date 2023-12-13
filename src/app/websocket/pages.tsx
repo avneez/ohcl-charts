@@ -61,7 +61,7 @@ const useWebSocketComponent = () => {
     //         </div>
     //     </div>
     // );
-    console.log("messagemessagemessagemessage",message)
+    // console.log("messagemessagemessagemessage",message)
     return [message]
     // const newC = message.map((candle:any) => {
     //     time: { candle.time }, open: { candle.open }, close: { candle.close }, high: { candle.high }, low: { candle.low }
