@@ -84,10 +84,8 @@ const OrderBook = () => {
 
   return (
     <div className="order-book-container">
-      <div className="order-book">
         <BidAskOrderBook orderBook={orderBook.bids} orderColor={"rgb(117, 226, 117)"} />
         <BidAskOrderBook orderBook={orderBook.asks} orderColor={"rgb(228, 94, 94)"} />
-      </div>
     </div>
   );
 };
