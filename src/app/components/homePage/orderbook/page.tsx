@@ -1,93 +1,45 @@
-// OrderBook.js
-
-import React, { useEffect, useState } from 'react';
-import './styles.css';
-import BidAskOrderBook from './bidAskOrder/page';
+import React from "react";
+import SingleOrder from "./singleOrder/page";
+import Header from "./header/page";
+import './style.css'
+import { addTotal } from "@/app/constants";
+import useOrderBook from '@/app/components/homePage/orderbook/useOrderBook';
 
 const OrderBook = () => {
-  const [orderBook, setOrderBook] = useState({ bids: [], asks: [] });
+    const { orderBook } = useOrderBook()
 
-  useEffect(() => {
-    const newSocket = new WebSocket('wss://api-pub.bitfinex.com/ws/2');
-
-    newSocket.addEventListener('open', () => {
-      console.log('WebSocket connected');
-      const msg = JSON.stringify({
-        event: 'subscribe',
-        channel: 'book',
-        symbol: 'tBTCUSD',
-        prec: 'P0',
-        freq: 'F0',
-      });
-      newSocket.send(msg);
-    });
-
-    newSocket.addEventListener('message', (event) => {
-      const data = JSON.parse(event.data);
-
-      if (Array.isArray(data)) {
-        const [channelId, orderData] = data;
-
-        if (channelId && orderData) {
-          console.log("adda", orderData)
-          const [price, count, amount] = orderData;
-
-          setOrderBook((prevOrderBook) => {
-            const updatedBids: any = [...prevOrderBook.bids];
-            const updatedAsks: any = [...prevOrderBook.asks];
-
-            if (count > 0) {
-              if (amount > 0) {
-                const existingBidIndex = updatedBids.findIndex((bid: any) => bid[0] === price);
-                if (existingBidIndex !== -1) {
-                  updatedBids[existingBidIndex] = [price, count, amount];
-                } else {
-                  updatedBids.push([price, count, amount]);
-                }
-              } else if (amount < 0) {
-                const existingAskIndex = updatedAsks.findIndex((ask: any) => ask[0] === price);
-                if (existingAskIndex !== -1) {
-                  updatedAsks[existingAskIndex] = [price, count, Math.abs(amount)];
-                } else {
-                  updatedAsks.push([price, count, Math.abs(amount)]);
-                }
-              }
-            } else if (count === 0) {
-              if (amount === 1) {
-                const filteredBids = updatedBids.filter((bid: any) => bid[0] !== price);
-                updatedBids.length = 0;
-                updatedBids.push(...filteredBids);
-              } else if (amount === -1) {
-                const filteredAsks = updatedAsks.filter((ask: any) => ask[0] !== price);
-                updatedAsks.length = 0;
-                updatedAsks.push(...filteredAsks);
-              }
-            }
-
-            return {
-              bids: updatedBids,
-              asks: updatedAsks,
-            };
-          });
-        }
-      }
-    });
-
-    return () => {
-      if (newSocket) {
-        newSocket.close();
-      }
-    };
-  }, []);
+    const bidData = ["count", "amount", "total", "price"];
+    const askData = ["price", "total", "amount", "count"];
 
 
-
-  return (
-    <div className="order-book-container">
-        <BidAskOrderBook orderBook={orderBook.bids} orderColor={"rgb(117, 226, 117)"} />
-        <BidAskOrderBook orderBook={orderBook.asks} orderColor={"rgb(228, 94, 94)"} />
-    </div>
-  );
+    const { asks, bids } = orderBook || {};
+    const negative = addTotal({ orderBook: asks });
+    const positive = addTotal({ orderBook: bids });
+    
+    return (
+        <div className="container">
+            <div className="head">
+                <Header orderData={bidData} />
+                <Header orderData={askData} />
+            </div>
+            <div className="card">
+                <div>
+                    <SingleOrder
+                        orderBook={positive}
+                        orderData={bidData}
+                        name="bidColor"
+                    />
+                </div>
+                <div>
+                    <SingleOrder
+                        orderBook={negative}
+                        orderData={askData}
+                        name="askColor"
+                    />
+                </div>
+            </div>
+        </div>
+    );
 };
 
 export default OrderBook;

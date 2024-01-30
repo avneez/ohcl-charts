@@ -1,16 +1,18 @@
 import React, { useState } from 'react'
 
-const CustomDropdown = () => {
-    const handleTimeFrameChange = (selectedTimeFrame) => {
-        setTimeFrame(selectedTimeFrame);
+const CustomDropdown = ({setTimeframe}:any) => {
+
+    const handleTimeFrameChange = (selectedTimeFrame : any) => {
+      console.log("selectedTimeFrame",selectedTimeFrame);
+        setTimeframe(selectedTimeFrame);
       };
 
     return (
         <div>
           <select onChange={(e) => handleTimeFrameChange(e.target.value)}>
-            <option value="5min">5 Minutes</option>
-            <option value="15min">15 Minutes</option>
-            <option value="30min">30 Minutes</option>
+            <option value="5m">5 Minutes</option>
+            <option value="15m">15 Minutes</option>
+            <option value="30m">30 Minutes</option>
           </select>
         </div>
       );

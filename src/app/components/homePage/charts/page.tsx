@@ -35,7 +35,7 @@ const Charts = ({ chartData }: any) => {
             wickUpColor: '#26a69a', wickDownColor: '#ef5350',
         });
         // console.log(chartData)
-        candlestickSeries.setData(chartData);
+        candlestickSeries?.setData(chartData);
         // if(message){
         //     candlestickSeries.update(
         //         {time:time, open:open, high:close, low:high, close:low}
