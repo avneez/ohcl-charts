@@ -9,8 +9,6 @@ const HomePage = () => {
   const [loading, setLoading] = useState(true);
   const [timeframe, setTimeframe] = useState("15m")
 
-  // console.log(timeframe);
-
   const transformData = (data: any) => {
     return data.map((item: any) => ({
       time: item[0],

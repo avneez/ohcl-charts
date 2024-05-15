@@ -3,7 +3,6 @@ import React, { useState } from 'react'
 const CustomDropdown = ({setTimeframe}:any) => {
 
     const handleTimeFrameChange = (selectedTimeFrame : any) => {
-      console.log("selectedTimeFrame",selectedTimeFrame);
         setTimeframe(selectedTimeFrame);
       };
 

@@ -10,8 +10,8 @@ const Charts = ({ chartData }: any) => {
 
     const chartContainerRef: any = useRef<string>('');
     // const chartRef: any = useRef<any>();
-    const [message]:any = useWebSocketComponent();
-    console.log("message",message)
+    // const [message]:any = useWebSocketComponent();
+    // console.log("message",message)
     // const {time, open, close, high ,low} = message;
 
 
@@ -46,7 +46,7 @@ const Charts = ({ chartData }: any) => {
         chart.timeScale().fitContent();
 
         return () => { chart.remove() }
-    }, [chartData, message])
+    }, [chartData])
 
 
     // console.log("chartData",chartData)
